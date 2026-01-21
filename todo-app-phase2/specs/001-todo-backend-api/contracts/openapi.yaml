@@ -1,0 +1,266 @@
+openapi: 3.0.3
+info:
+  title: Todo Backend API
+  description: API for the Todo App backend service with authentication and task management
+  version: 1.0.0
+servers:
+  - url: http://localhost:8000/api
+    description: Development server
+
+paths:
+  /{user_id}/tasks:
+    get:
+      summary: Get all tasks for authenticated user
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: The ID of the user whose tasks to retrieve
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [all, pending, completed]
+          description: Filter tasks by status
+        - name: sort
+          in: query
+          schema:
+            type: string
+            enum: [date, title]
+          description: Sort tasks by date or title
+        - name: order
+          in: query
+          schema:
+            type: string
+            enum: [asc, desc]
+          description: Sort order (ascending or descending)
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: List of tasks for the user
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Task'
+        '401':
+          description: Unauthorized - invalid or missing JWT token
+        '403':
+          description: Forbidden - user trying to access another user's tasks
+    post:
+      summary: Create a new task for the authenticated user
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: The ID of the user creating the task
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskCreateRequest'
+      responses:
+        '201':
+          description: Task created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        '400':
+          description: Bad request - invalid input data
+        '401':
+          description: Unauthorized - invalid or missing JWT token
+        '403':
+          description: Forbidden - user trying to create task for another user
+
+  /{user_id}/tasks/{id}:
+    get:
+      summary: Get a specific task
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: The ID of the task to retrieve
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Task details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        '401':
+          description: Unauthorized - invalid or missing JWT token
+        '403':
+          description: Forbidden - user trying to access another user's task
+        '404':
+          description: Task not found
+    put:
+      summary: Update a task
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: The ID of the task to update
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskUpdateRequest'
+      responses:
+        '200':
+          description: Task updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        '400':
+          description: Bad request - invalid input data
+        '401':
+          description: Unauthorized - invalid or missing JWT token
+        '403':
+          description: Forbidden - user trying to update another user's task
+        '404':
+          description: Task not found
+    delete:
+      summary: Delete a task
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: The ID of the task to delete
+      security:
+        - BearerAuth: []
+      responses:
+        '204':
+          description: Task deleted successfully
+        '401':
+          description: Unauthorized - invalid or missing JWT token
+        '403':
+          description: Forbidden - user trying to delete another user's task
+        '404':
+          description: Task not found
+
+  /{user_id}/tasks/{id}/complete:
+    patch:
+      summary: Toggle a task's completion status
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: The ID of the task to update
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Task completion status updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        '401':
+          description: Unauthorized - invalid or missing JWT token
+        '403':
+          description: Forbidden - user trying to update another user's task
+        '404':
+          description: Task not found
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    Task:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        description:
+          type: string
+        completed:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        user_id:
+          type: integer
+      required:
+        - id
+        - title
+        - completed
+        - created_at
+        - updated_at
+        - user_id
+
+    TaskCreateRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          maxLength: 200
+        description:
+          type: string
+          maxLength: 1000
+      required:
+        - title
+
+    TaskUpdateRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          maxLength: 200
+        description:
+          type: string
+          maxLength: 1000
+        completed:
+          type: boolean

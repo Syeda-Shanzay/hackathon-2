@@ -1,0 +1,167 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/**
+ * Additional global styles for the Todo App
+ * Contains consistent color palette and enhanced UI styles
+ */
+
+/* Color Palette */
+:root {
+  --primary-color: #4f46e5; /* indigo-600 */
+  --primary-hover: #4338ca; /* indigo-700 */
+  --secondary-color: #6b7280; /* gray-500 */
+  --success-color: #10b981; /* emerald-500 */
+  --warning-color: #f59e0b; /* amber-500 */
+  --danger-color: #ef4444; /* red-500 */
+  --light-bg: #f9fafb; /* gray-50 */
+  --dark-text: #1f2937; /* gray-800 */
+  --light-text: #6b7280; /* gray-500 */
+  --border-color: #e5e7eb; /* gray-200 */
+}
+
+/* Enhanced Button Styles */
+.btn {
+  @apply inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors duration-200;
+}
+
+.btn-primary {
+  @apply btn bg-indigo-600 text-white hover:bg-indigo-700 focus:ring-indigo-500;
+}
+
+.btn-secondary {
+  @apply btn bg-gray-600 text-white hover:bg-gray-700 focus:ring-gray-500;
+}
+
+.btn-success {
+  @apply btn bg-emerald-600 text-white hover:bg-emerald-700 focus:ring-emerald-500;
+}
+
+.btn-danger {
+  @apply btn bg-red-600 text-white hover:bg-red-700 focus:ring-red-500;
+}
+
+.btn-outline {
+  @apply btn bg-white text-gray-700 border-gray-300 hover:bg-gray-50 focus:ring-indigo-500;
+}
+
+/* Enhanced Card Styles */
+.card {
+  @apply bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6 transition-shadow duration-200 hover:shadow-md;
+}
+
+/* Enhanced Task Status Badge Styles */
+.badge {
+  @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+}
+
+.badge-pending {
+  @apply badge bg-amber-100 text-amber-800;
+}
+
+.badge-completed {
+  @apply badge bg-emerald-100 text-emerald-800;
+}
+
+/* Enhanced Form Element Styles */
+.form-input {
+  @apply block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition duration-200;
+}
+
+.form-select {
+  @apply form-input;
+}
+
+.form-textarea {
+  @apply form-input;
+  min-height: 100px;
+}
+
+/* Enhanced Loading Spinner */
+.spinner {
+  @apply animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-current;
+}
+
+/* Enhanced Utility Classes */
+.text-primary {
+  @apply text-indigo-600;
+}
+
+.bg-primary {
+  @apply bg-indigo-600;
+}
+
+.text-success {
+  @apply text-emerald-600;
+}
+
+.text-warning {
+  @apply text-amber-600;
+}
+
+.text-danger {
+  @apply text-red-600;
+}
+
+/* Responsive Utilities */
+@media (min-width: 640px) {
+  .sm\:card {
+    @apply p-6;
+  }
+}
+
+@media (min-width: 768px) {
+  .md\:btn {
+    @apply px-6 py-3 text-base;
+  }
+}
+
+/* Custom scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c5c5c5;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* Focus-visible enhancements for accessibility */
+.focus-visible {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.5);
+}
+
+/* Smooth scrolling for better UX */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Enhanced animations */
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Input focus effects */
+input:focus,
+textarea:focus,
+select:focus {
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
