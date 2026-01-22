@@ -149,10 +149,18 @@ export const useSession = (): SessionData => {
     };
   }, []);
 
+  type CustomSessionReturn = {
+    data: any;
+    isLoading: boolean;
+    user: any | null;
+  };
+
   return {
     data: session,
-    isLoading
-  };
+    isLoading,
+    user: session?.user ?? null
+  } as CustomSessionReturn;
+
 };
 
 // Helper function to get auth headers
