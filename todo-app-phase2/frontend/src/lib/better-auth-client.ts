@@ -109,7 +109,6 @@ export const getCurrentUser = async (): Promise<User> => {
   return user;
 };
 
-// Custom hook to get current session
 export const useSession = (): SessionData => {
   const [session, setSession] = useState<{ user: User | null } | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -134,7 +133,6 @@ export const useSession = (): SessionData => {
 
     fetchSession();
 
-    // Listen for storage changes (e.g., logout from another tab)
     const handleStorageChange = () => {
       const token = localStorage.getItem(TOKEN_KEY);
       if (!token) {
@@ -149,19 +147,13 @@ export const useSession = (): SessionData => {
     };
   }, []);
 
-  type CustomSessionReturn = {
-    data: any;
-    isLoading: boolean;
-    user: any | null;
-  };
-
+  // ✅ Yahan fix:
   return {
-    data: session,
-    isLoading,
-    user: session?.user ?? null
-  } as CustomSessionReturn;
-
+    user: session?.user ?? null,
+    isLoading
+  };
 };
+
 
 // Helper function to get auth headers
 export const getAuthHeaders = (): { Authorization?: string } => {

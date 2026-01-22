@@ -28,20 +28,19 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
-  const { data: session, isLoading: isPending } = useSession() as any;
+  const { user: sessionUser, isLoading: isPending } = useSession();
   const [loading, setLoading] = useState<boolean>(false);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [user, setUser] = useState<User | null>(null);
 
-  // Sync session state with our context
   useEffect(() => {
-    if (session?.user) {
+    if (sessionUser) {
       const userData: User = {
-        id: session.user.id,
-        email: session.user.email,
-        name: session.user.name || session.user.email?.split('@')[0],
-        created_at: session.user.created_at || new Date().toISOString(),
-        updated_at: session.user.updated_at || new Date().toISOString()
+        id: sessionUser.id,
+        email: sessionUser.email,
+        name: sessionUser.name || sessionUser.email?.split('@')[0],
+        created_at: sessionUser.created_at || new Date().toISOString(),
+        updated_at: sessionUser.updated_at || new Date().toISOString()
       };
       setUser(userData);
       setIsAuthenticated(true);
@@ -49,7 +48,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       setUser(null);
       setIsAuthenticated(false);
     }
-  }, [session]);
+  }, [sessionUser]);
+
 
   const login = async (email: string, password: string) => {
     setLoading(true);
