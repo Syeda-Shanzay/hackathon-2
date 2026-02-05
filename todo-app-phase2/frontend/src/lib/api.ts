@@ -69,11 +69,23 @@ class ApiClient {
       ...options.headers,
     } as Record<string, string>;
 
+    // const headers = {
+    //   'Content-Type': 'application/json',
+    //   ...options.headers,
+    // } as Record<string, string>;
+
+
     try {
+      // const response = await fetch(url, {
+      //   ...options,
+      //   headers,
+      // });
       const response = await fetch(url, {
         ...options,
         headers,
+        credentials: 'include', // ⭐⭐⭐ VERY IMPORTANT
       });
+
 
       // Handle 401 Unauthorized by redirecting to login
       if (response.status === 401) {
